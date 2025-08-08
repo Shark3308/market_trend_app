@@ -1,6 +1,6 @@
 # analyze_consumer.py - Market Trend Analyzer (Consumer Side)
 # Processes: prices.csv, transactions.csv, retailer_products.csv 
-# Outputs: consumer_insights.json
+# 
 
 import pandas as pd
 import numpy as np

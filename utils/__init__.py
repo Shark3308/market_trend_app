@@ -1,42 +1,31 @@
-# app/__init__.py - Package initialization for Market Trend App backend
+# utils/__init__.py - Initialization for shared utilities
 
 """
-Market Trend App Backend Modules
+Market Trend App - Utility Module
 
-Provides:
-- analyze_consumer: Consumer price trend analysis
-- analyze_retailer: Retailer sales analytics
-- utils: Shared utility functions
+Provides shared functionality for:
+- CSV loading and validation (csv_loader.py)
+- Data filtering operations (filters.py)
 """
 
 __version__ = "1.0.0"
-__all__ = []  # Explicit empty list - import modules directly
+__all__ = ['csv_loader', 'filters']  # Explicitly expose public modules
 
 import logging
 from pathlib import Path
 
-# Configure package-level logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+# Set up utility-specific logging
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())  # Default no output
 
-def verify_data_paths():
-    """Ensure required data directories exist"""
+def get_data_path(file_type: str) -> Path:
+    """Get absolute path to data files based on type ('raw' or 'processed')"""
     base_dir = Path(__file__).parent.parent
-    paths = [
-        base_dir / 'data/raw',
-        base_dir / 'data/processed'
-    ]
-    
-    for path in paths:
-        path.mkdir(parents=True, exist_ok=True)
-        logger.debug(f"Verified path: {path}")
+    if file_type == 'raw':
+        return base_dir / 'data/raw'
+    elif file_type == 'processed':
+        return base_dir / 'data/processed'
+    raise ValueError(f"Unknown file_type: {file_type}. Use 'raw' or 'processed'")
 
-# Initialize when package is imported
-verify_data_paths()
-logger.info(f"Market Trend App backend v{__version__} initialized")
-
-# Note: No direct imports here to prevent circular imports
-# Modules should be imported directly where needed
+# Package-level initialization
+_logger.info(f"Market Trend Utils v{__version__} initialized")
